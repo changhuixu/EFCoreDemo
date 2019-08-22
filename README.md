@@ -10,15 +10,16 @@ Dependencies: .NET Core 2.2, Microsoft.EntityFrameworkCore v2.2
 
 1. Apply EF Migration to your local SQL Server database
 
-    ```powershell
-    # if using Package Manger Console in Visual Studio
-    Update-Database
-  
-    # if using console
-    dotnet ef database update
-    ```
+   ```powershell
+   # if using Package Manger Console in Visual Studio
+   Update-Database
+
+   # if using console
+   dotnet ef database update
+   ```
 
 1. Run Web App
 
-    In `WebBlogs.Web` folder, issue command `dotnet run`, then in browser navigate to [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html). In Swagger page, you can try out APIs.
+   In `WebBlogs.Web` folder, issue command `dotnet watch run`, then in browser navigate to [http://localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html). In Swagger page, you can try out APIs.
 
+   Or, in Visual Studio, click run "IIS Express".

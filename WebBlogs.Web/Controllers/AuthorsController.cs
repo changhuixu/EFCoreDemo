@@ -54,6 +54,16 @@ namespace WebBlogs.Web.Controllers
             }
         }
 
+        [HttpPut("{id:int}/membership"), ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateMembership(int id, AuthorMembership membership)
+        {
+            var author = await _dbContext.Authors.FindAsync(id);
+            EnsureAuthorExists(author);
+            author.UpdateMembership(membership);
+            await _dbContext.SaveChangesAsync();
+            return NoContent();
+        }
+
         [HttpGet, Route("{id:int}/blogs"), ProducesResponseType(typeof(IEnumerable<BlogViewModel>), StatusCodes.Status200OK)]
         public async Task<IEnumerable<BlogViewModel>> GetAuthorsBlogs(int id)
         {

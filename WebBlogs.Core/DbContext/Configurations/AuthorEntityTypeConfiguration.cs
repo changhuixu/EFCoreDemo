@@ -14,6 +14,7 @@ namespace WebBlogs.Core.DbContext.Configurations
             builder.Property(x => x.Id).HasColumnName("Id").ValueGeneratedOnAdd();
             builder.Property(x => x.FirstName).HasColumnName("FirstName").HasMaxLength(50).IsRequired();
             builder.Property(x => x.LastName).HasColumnName("LastName").HasMaxLength(50).IsRequired();
+            builder.Property(x => x.AuthorMembership).HasColumnName("AuthorMembership");
 
             builder.Metadata.FindNavigation(nameof(Author.Blogs)).SetPropertyAccessMode(PropertyAccessMode.Field);
             builder.HasMany(x => x.Blogs).WithOne(b => b.Author).HasForeignKey(b => b.AuthorId)

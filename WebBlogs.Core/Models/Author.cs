@@ -8,12 +8,16 @@ namespace WebBlogs.Core.Models
         public int Id { get; protected set; }
         public string FirstName { get; protected set; }
         public string LastName { get; protected set; }
+        public AuthorMembership AuthorMembership { get; protected set; }
         private readonly List<Blog> _blogs = new List<Blog>();
         public IReadOnlyCollection<Blog> Blogs => _blogs;
 
-        protected Author() { }
+        protected Author()
+        {
+            AuthorMembership = AuthorMembership.Bronze;
+        }
 
-        public Author(CreateAuthorCommand cmd)
+        public Author(CreateAuthorCommand cmd) : this()
         {
             FirstName = cmd.FirstName;
             LastName = cmd.LastName;
@@ -30,5 +34,19 @@ namespace WebBlogs.Core.Models
         {
             _blogs.Remove(blog);
         }
+
+        public void UpdateMembership(AuthorMembership membership)
+        {
+            // add validations.
+            AuthorMembership = membership;
+        }
+    }
+
+    public enum AuthorMembership
+    {
+        Bronze,
+        Silver,
+        Gold,
+        Platinum
     }
 }

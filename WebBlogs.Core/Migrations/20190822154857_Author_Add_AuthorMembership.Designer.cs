@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebBlogs.Core.DbContext;
 
 namespace WebBlogs.Core.Migrations
 {
     [DbContext(typeof(WebBlogsDbContext))]
-    partial class WebBlogsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190822154857_Author_Add_AuthorMembership")]
+    partial class Author_Add_AuthorMembership
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
