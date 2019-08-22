@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using WebBlogs.Core.Commands;
 using WebBlogs.Core.DbContext;
 using WebBlogs.Core.Models;
@@ -16,17 +17,40 @@ namespace WebBlogs.Web.Controllers
     [Route("api/[controller]")]
     public class AuthorsController : Controller
     {
+        private readonly ILogger<AuthorsController> _logger;
         private readonly WebBlogsDbContext _dbContext;
 
-        public AuthorsController(WebBlogsDbContext dbContext)
+        public AuthorsController(WebBlogsDbContext dbContext, ILogger<AuthorsController> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         [HttpGet, Route(""), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
         public async Task<IEnumerable<AuthorViewModel>> GetAuthors()
         {
             return await _dbContext.Authors.Select(x => new AuthorViewModel(x)).ToListAsync();
+        }
+
+        [HttpGet, Route("gold-and-up-1"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthorsWithGoldAndUpMembership1()
+        {
+            _logger.LogInformation("Query1 Start ==================");
+            return await _dbContext.Authors
+                .Where(x => x.AuthorMembership == AuthorMembership.Gold ||
+                            x.AuthorMembership == AuthorMembership.Platinum)
+                .Select(x => new AuthorViewModel(x))
+                .ToListAsync();
+        }
+
+        [HttpGet, Route("gold-and-up-2"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthorsWithGoldAndUpMembership2()
+        {
+            _logger.LogInformation("Query2 Start ==================");
+            return await _dbContext.Authors
+                .Where(Author.GoldAndUp)
+                .Select(x => new AuthorViewModel(x))
+                .ToListAsync();
         }
 
         [HttpGet, Route("{id:int}"), ProducesResponseType(typeof(AuthorViewModel), StatusCodes.Status200OK)]

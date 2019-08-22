@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using WebBlogs.Core.Commands;
 
 namespace WebBlogs.Core.Models
@@ -11,6 +13,10 @@ namespace WebBlogs.Core.Models
         public AuthorMembership AuthorMembership { get; protected set; }
         private readonly List<Blog> _blogs = new List<Blog>();
         public IReadOnlyCollection<Blog> Blogs => _blogs;
+
+        public static Expression<Func<Author, bool>> GoldAndUp = x =>
+            x.AuthorMembership == AuthorMembership.Gold || x.AuthorMembership == AuthorMembership.Platinum;
+        
 
         protected Author()
         {
