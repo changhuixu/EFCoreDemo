@@ -2,7 +2,7 @@
 
 EntityFrameworkCore Demo in a WebAPI project.
 
-Dependencies: .NET Core 2.1.1, Microsoft.EntityFrameworkCore v2.1.1
+Dependencies: .NET Core 2.2, Microsoft.EntityFrameworkCore v2.2
 
 [Medium Blog Post](https://medium.com/@changhuixu/ientitytypeconfiguration-t-in-entityframework-core-3fe7abc5ee7a)
 
