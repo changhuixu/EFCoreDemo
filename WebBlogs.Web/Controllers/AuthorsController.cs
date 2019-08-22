@@ -53,6 +53,42 @@ namespace WebBlogs.Web.Controllers
                 .ToListAsync();
         }
 
+        [HttpGet, Route("gold-and-up-3"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthorsWithGoldAndUpMembership3()
+        {
+            var authors = await _dbContext.Authors.ToListAsync();
+            var goldAndUpAuthors = authors
+                .Where(Author.GoldAndUp.Compile())
+                .Select(x => new AuthorViewModel(x))
+                .ToList();
+            return goldAndUpAuthors;
+        }
+
+        [HttpGet, Route("authors1"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthors1()
+        {
+            return await _dbContext.Authors.Select(x => new AuthorViewModel(x)).ToListAsync();
+        }
+
+        [HttpGet, Route("authors2"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthors2()
+        {
+            return await _dbContext.Authors.Select(AuthorViewModel.Projection1).ToListAsync();
+        }
+
+        [HttpGet, Route("authors22"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthors22()
+        {
+            return await _dbContext.Authors.Select(AuthorViewModel.Projection2).ToListAsync();
+        }
+
+        [HttpGet, Route("authors3"), ProducesResponseType(typeof(IEnumerable<AuthorViewModel>), StatusCodes.Status200OK)]
+        public async Task<IEnumerable<AuthorViewModel>> GetAuthors3()
+        {
+            var authors = await _dbContext.Authors.ToListAsync();
+            return authors.Select(AuthorViewModel.Projection1.Compile()).ToList();
+        }
+
         [HttpGet, Route("{id:int}"), ProducesResponseType(typeof(AuthorViewModel), StatusCodes.Status200OK)]
         public async Task<AuthorViewModel> GetAuthor(int id)
         {

@@ -26,7 +26,7 @@ Dependencies: .NET Core 2.2, Microsoft.EntityFrameworkCore v2.2
 
 ## EF Core LINQ Expression
 
-### Normal Query (44ms)
+### Normal Query
 
 ```csharp
 return await _dbContext.Authors
@@ -44,7 +44,7 @@ FROM [Authors] AS [x]
 WHERE ([x].[AuthorMembership] = 2) OR ([x].[AuthorMembership] = 3)
 ```
 
-### Expression (4ms)
+### Expression
 
 ```csharp
 public class Author
@@ -67,4 +67,52 @@ Executed DbCommand (4ms) [Parameters=[], CommandType='Text', ommandTimeout='30']
 SELECT [x].[Id], [x].[AuthorMembership], [x].[FirstName], [x].LastName]
 FROM [Authors] AS [x]
 WHERE ([x].[AuthorMembership] = 2) OR ([x].[AuthorMembership] = 3)
+```
+
+## Expression and Projection
+
+```csharp
+await _dbContext.Authors.Select(x => new AuthorViewModel(x)).ToListAsync();
+```
+
+```sql
+Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [x].[Id], [x].[AuthorMembership], [x].[FirstName], [x].[LastName]
+FROM [Authors] AS [x]
+```
+
+```csharp
+public static Expression<Func<Author, AuthorViewModel>> Projection1
+            => x => new AuthorViewModel
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName
+            };
+
+await _dbContext.Authors.Select(AuthorViewModel.Projection1).ToListAsync();
+```
+
+```sql
+Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [x].[Id], [x].[FirstName], [x].[LastName]
+FROM [Authors] AS [x]
+```
+
+```csharp
+public static Expression<Func<Author, AuthorViewModel>> Projection2
+            => x => new AuthorViewModel(x);
+
+return await _dbContext.Authors.Select(AuthorViewModel.Projection2).ToListAsync();
+```
+
+```sql
+Executed DbCommand (4ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+SELECT [x].[Id], [x].[AuthorMembership], [x].[FirstName], [x].[LastName]
+FROM [Authors] AS [x]
+```
+
+```csharp
+var authors = await _dbContext.Authors.ToListAsync();
+return authors.Select(AuthorViewModel.Projection1.Compile()).ToList();
 ```
